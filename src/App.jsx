@@ -6,37 +6,38 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvZGR2cGFmemNuaGJqZWF6cXpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzYwODkyNCwiZXhwIjoyMDkzMTg0OTI0fQ.ZVv3xBB5yKCmJkaOohn4MhfKz7KUgnoozqbrg0cxi8M"
 );
 
-const CHANNEL_ICON = { voice: "◉", whatsapp: "◈", web_chat: "◇" };
+const CHANNEL_ICON  = { voice: "◉", whatsapp: "◈", web_chat: "◇" };
 const CHANNEL_LABEL = { voice: "Voice", whatsapp: "WhatsApp", web_chat: "Web" };
 
 const css = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:       #f9f7f4;
-    --surface:  #ffffff;
-    --surface2: #f4f1ed;
-    --border:   rgba(0,0,0,0.07);
-    --border2:  rgba(0,0,0,0.13);
-    --gold:     #9a7a3f;
-    --gold-light: #c9a96e;
-    --gold-dim: rgba(154,122,63,0.08);
-    --gold-line: rgba(154,122,63,0.25);
-    --text:     #1a1611;
-    --text-dim: rgba(26,22,17,0.5);
-    --text-muted: rgba(26,22,17,0.32);
-    --green:    #1a7a4a;
-    --green-bg: rgba(26,122,74,0.07);
-    --red:      #b03030;
-    --red-bg:   rgba(176,48,48,0.07);
-    --blue:     #2457a0;
-    --blue-bg:  rgba(36,87,160,0.07);
-    --amber:    #9a6e1a;
-    --amber-bg: rgba(154,110,26,0.07);
+    --bg:         #f5f3ef;
+    --surface:    #faf9f7;
+    --surface2:   #eeebe5;
+    --border:     rgba(0,0,0,0.08);
+    --border2:    rgba(0,0,0,0.15);
+    --gold:       #8a6a2e;
+    --gold-light: #b8935a;
+    --gold-dim:   rgba(138,106,46,0.07);
+    --gold-line:  rgba(138,106,46,0.22);
+    --text:       #1c1713;
+    --text-dim:   rgba(28,23,19,0.55);
+    --text-muted: rgba(28,23,19,0.35);
+    --green:      #1a6e42;
+    --green-bg:   rgba(26,110,66,0.08);
+    --red:        #a02828;
+    --red-bg:     rgba(160,40,40,0.07);
+    --blue:       #1e4d8c;
+    --blue-bg:    rgba(30,77,140,0.07);
+    --amber:      #8a5e1a;
+    --amber-bg:   rgba(138,94,26,0.08);
     --font-display: 'Cormorant Garamond', serif;
-    --font-body:    'DM Sans', sans-serif;
+    --font-body:    'Outfit', sans-serif;
+    --font-mono:    'DM Mono', monospace;
   }
 
   body {
@@ -45,70 +46,78 @@ const css = `
     font-family: var(--font-body);
     font-weight: 300;
     min-height: 100vh;
+    font-size: 14px;
   }
 
-  /* Header */
+  /* ── Header ── */
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 40px;
+    padding: 16px 36px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
 
-  .header-left { display: flex; align-items: center; gap: 18px; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
 
   .logo-mark {
-    width: 38px; height: 38px;
+    width: 34px; height: 34px;
     border: 1.5px solid var(--gold);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
-    font-size: 20px; color: var(--gold);
-    letter-spacing: 0.05em;
-    font-weight: 400;
+    font-size: 17px; color: var(--gold);
+    font-weight: 400; flex-shrink: 0;
   }
 
-  .brand h1 {
+  .brand-name {
     font-family: var(--font-display);
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 400;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text);
+    display: block;
   }
 
-  .brand p {
+  .brand-sub {
     font-size: 10px;
     color: var(--text-muted);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-top: 2px;
+    margin-top: 1px;
+    display: block;
   }
 
-  .header-right { display: flex; align-items: center; gap: 10px; }
+  .header-right { display: flex; gap: 8px; }
 
   .status-pill {
     display: flex; align-items: center; gap: 6px;
-    padding: 6px 14px;
+    padding: 5px 13px;
     border: 1px solid var(--border2);
-    background: var(--surface);
     font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-dim);
+    background: var(--surface);
   }
 
   .dot {
     width: 6px; height: 6px; border-radius: 50%;
-    animation: pulse 2.5s ease-in-out infinite;
+    animation: blink 2.5s ease-in-out infinite;
   }
   .dot-green { background: var(--green); }
   .dot-blue  { background: var(--blue); }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Stats */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-light) 40%, transparent 100%);
+    opacity: 0.35;
+  }
+
+  /* ── Stats ── */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -117,10 +126,11 @@ const css = `
   }
 
   .stat-card {
-    padding: 28px 40px;
+    padding: 20px 36px;
     border-right: 1px solid var(--border);
+    transition: background 0.2s;
     position: relative;
-    transition: background 0.25s;
+    overflow: hidden;
   }
   .stat-card:last-child { border-right: none; }
   .stat-card:hover { background: var(--gold-dim); }
@@ -128,7 +138,7 @@ const css = `
   .stat-card::after {
     content: '';
     position: absolute;
-    bottom: 0; left: 40px; right: 40px;
+    bottom: 0; left: 36px; right: 36px;
     height: 1.5px;
     background: var(--gold-light);
     transform: scaleX(0);
@@ -142,63 +152,70 @@ const css = `
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-family: var(--font-body);
+    font-weight: 400;
   }
 
+  /* Numbers use Outfit (clean sans) so "1" renders as "1" not "I" */
   .stat-value {
-    font-family: var(--font-display);
-    font-size: 52px;
+    font-family: var(--font-body);
+    font-size: 44px;
     font-weight: 300;
     line-height: 1;
+    letter-spacing: -0.02em;
   }
 
   .stat-sub {
     font-size: 11px;
     color: var(--text-muted);
-    margin-top: 6px;
+    margin-top: 5px;
+    font-weight: 300;
   }
 
-  /* Layout */
+  /* ── Layout ── */
   .main {
     display: grid;
-    grid-template-columns: 260px 1fr;
-    min-height: calc(100vh - 153px);
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 130px);
   }
 
-  /* Sidebar */
+  /* ── Sidebar ── */
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
-    padding: 28px 0;
+    padding: 24px 0;
   }
 
-  .sidebar-section { padding: 0 20px; margin-bottom: 32px; }
+  .sidebar-section { padding: 0 18px; margin-bottom: 28px; }
 
   .sidebar-title {
     font-size: 9px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
     border-bottom: 1px solid var(--border);
+    font-weight: 400;
   }
 
   .nav-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 12px;
+    padding: 9px 10px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.18s;
     font-size: 13px;
-    color: var(--text-dim);
-    letter-spacing: 0.02em;
+    color: var(--text);
+    font-weight: 400;
     margin-bottom: 2px;
     border: 1px solid transparent;
+    border-radius: 2px;
   }
 
-  .nav-item:hover { color: var(--text); background: var(--gold-dim); }
+  .nav-item:hover { background: var(--gold-dim); color: var(--gold); }
 
   .nav-item.active {
     color: var(--gold);
@@ -206,96 +223,113 @@ const css = `
     border-color: var(--gold-line);
   }
 
-  .nav-icon { width: 16px; text-align: center; font-size: 13px; }
+  .nav-icon { width: 15px; text-align: center; font-size: 12px; opacity: 0.7; }
 
   .nav-count {
     margin-left: auto;
     font-size: 10px;
+    font-family: var(--font-mono);
     background: var(--gold-dim);
     color: var(--gold);
-    padding: 2px 8px;
+    padding: 1px 7px;
     border: 1px solid var(--gold-line);
+    font-weight: 400;
   }
 
-  /* Content */
-  .content { padding: 32px 40px; background: var(--bg); }
+  .sys-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  /* ── Content ── */
+  .content { padding: 28px 36px; }
 
   .content-header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .content-title {
     font-family: var(--font-display);
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 300;
     font-style: italic;
-    letter-spacing: 0.02em;
     color: var(--text);
   }
 
   .content-meta {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    font-weight: 400;
   }
 
-  /* Leads */
+  /* ── Lead rows ── */
   .lead-list { display: flex; flex-direction: column; gap: 2px; }
 
   .lead-row {
     display: grid;
     grid-template-columns: 1fr auto auto auto;
     align-items: center;
-    gap: 24px;
-    padding: 20px 24px;
+    gap: 20px;
+    padding: 16px 22px;
     background: var(--surface);
     border: 1px solid var(--border);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.18s;
   }
 
-  .lead-row:hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .lead-row:hover {
+    border-color: var(--border2);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transform: translateY(-1px);
+  }
 
   .lead-row.selected {
     border-color: var(--gold);
     background: var(--gold-dim);
-    box-shadow: 0 2px 12px rgba(154,122,63,0.1);
   }
 
   .lead-name {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 400;
     color: var(--text);
-    letter-spacing: 0.01em;
   }
 
   .lead-meta {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
-    margin-top: 3px;
+    margin-top: 2px;
+    font-weight: 300;
   }
 
   .lead-channel {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 5px;
+    font-weight: 400;
   }
 
+  .score-wrap { text-align: right; }
+
   .score-number {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 300;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 400;
     line-height: 1;
-    text-align: right;
   }
 
   .score-label {
@@ -303,67 +337,64 @@ const css = `
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
-    text-align: right;
     margin-top: 2px;
+    font-weight: 400;
   }
 
   .status-tag {
     font-size: 9px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
-    padding: 4px 10px;
+    padding: 3px 9px;
     border: 1px solid;
+    font-weight: 400;
+    white-space: nowrap;
   }
 
-  .tag-qualified      { color: var(--green); border-color: rgba(26,122,74,0.3); background: var(--green-bg); }
-  .tag-new            { color: var(--blue);  border-color: rgba(36,87,160,0.3); background: var(--blue-bg);  }
-  .tag-appointment_set{ color: var(--gold);  border-color: var(--gold-line);    background: var(--gold-dim); }
-  .tag-nurturing      { color: var(--amber); border-color: rgba(154,110,26,0.3);background: var(--amber-bg); }
-  .tag-lost           { color: var(--red);   border-color: rgba(176,48,48,0.3); background: var(--red-bg);   }
+  .tag-qualified       { color: var(--green); border-color: rgba(26,110,66,0.3);  background: var(--green-bg); }
+  .tag-new             { color: var(--blue);  border-color: rgba(30,77,140,0.3);  background: var(--blue-bg);  }
+  .tag-appointment_set { color: var(--gold);  border-color: var(--gold-line);     background: var(--gold-dim); }
+  .tag-nurturing       { color: var(--amber); border-color: rgba(138,94,26,0.3);  background: var(--amber-bg); }
+  .tag-lost            { color: var(--red);   border-color: rgba(160,40,40,0.3);  background: var(--red-bg);   }
 
-  /* Conversations */
+  /* ── Conversations ── */
   .convo-list { display: flex; flex-direction: column; gap: 2px; }
 
   .convo-row {
-    padding: 18px 24px;
+    padding: 14px 22px;
     background: var(--surface);
     border: 1px solid var(--border);
-    transition: all 0.2s;
+    transition: border-color 0.18s;
   }
-
   .convo-row:hover { border-color: var(--border2); }
 
   .convo-row-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
   }
 
   .role-tag {
     font-size: 9px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 3px 10px;
+    padding: 3px 9px;
     border: 1px solid;
+    font-weight: 400;
   }
-
   .role-assistant { color: var(--gold); border-color: var(--gold-line); background: var(--gold-dim); }
   .role-user      { color: var(--text-dim); border-color: var(--border2); }
 
-  .convo-time { font-size: 10px; color: var(--text-muted); }
+  .convo-time { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
 
-  .convo-text {
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.65;
-  }
+  .convo-text { font-size: 13px; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
 
-  /* Detail panel */
+  /* ── Detail panel ── */
   .detail-panel {
     position: fixed;
     top: 0; right: 0;
-    width: 400px;
+    width: 390px;
     height: 100vh;
     background: var(--surface);
     border-left: 1px solid var(--border2);
@@ -371,15 +402,13 @@ const css = `
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-    overflow: hidden;
-    box-shadow: -8px 0 40px rgba(0,0,0,0.08);
+    transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -6px 0 32px rgba(0,0,0,0.07);
   }
-
   .detail-panel.open { transform: translateX(0); }
 
   .detail-header {
-    padding: 28px 28px 24px;
+    padding: 24px 26px 20px;
     border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
@@ -389,46 +418,46 @@ const css = `
 
   .detail-name {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 300;
     font-style: italic;
-    line-height: 1.1;
     color: var(--text);
+    line-height: 1.1;
   }
 
   .detail-contact {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
-    margin-top: 5px;
+    margin-top: 4px;
+    font-weight: 300;
   }
 
   .close-btn {
     background: none;
     border: 1px solid var(--border2);
     color: var(--text-dim);
-    width: 30px; height: 30px;
+    width: 28px; height: 28px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    transition: all 0.2s;
+    font-size: 13px;
+    transition: all 0.18s;
     flex-shrink: 0;
   }
-
   .close-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-  .detail-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
+  .detail-body { flex: 1; overflow-y: auto; padding: 22px 26px; }
 
   .detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .detail-field {
     background: var(--bg);
     border: 1px solid var(--border);
-    padding: 12px 14px;
+    padding: 11px 13px;
   }
 
   .field-label {
@@ -436,19 +465,20 @@ const css = `
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    font-weight: 400;
   }
 
   .field-value {
-    font-family: var(--font-display);
-    font-size: 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
     font-weight: 400;
     color: var(--text);
   }
 
   .takeover-btn {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     background: transparent;
     border: 1px solid var(--red);
     color: var(--red);
@@ -457,10 +487,10 @@ const css = `
     letter-spacing: 0.14em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 24px;
+    transition: all 0.18s;
+    margin-bottom: 22px;
+    font-weight: 400;
   }
-
   .takeover-btn:hover { background: var(--red-bg); }
 
   .section-title {
@@ -468,17 +498,17 @@ const css = `
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 14px;
-    padding-bottom: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 7px;
     border-bottom: 1px solid var(--border);
+    font-weight: 400;
   }
 
   .bubble {
-    margin-bottom: 10px;
-    padding: 12px 14px;
+    margin-bottom: 8px;
+    padding: 11px 13px;
     border: 1px solid var(--border);
   }
-
   .bubble.assistant { border-color: var(--gold-line); background: var(--gold-dim); }
   .bubble.user      { background: var(--bg); }
 
@@ -487,51 +517,43 @@ const css = `
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    font-weight: 400;
   }
-
   .bubble-role.assistant { color: var(--gold); }
 
-  .bubble-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .bubble-text { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 300; }
 
-  /* Empty */
+  /* ── Empty ── */
   .empty-state {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 80px 40px; text-align: center;
+    padding: 60px 40px; text-align: center;
   }
-
   .empty-glyph {
-    font-family: var(--font-display);
-    font-size: 56px; font-style: italic;
-    color: var(--text-muted); margin-bottom: 16px;
+    font-size: 36px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    opacity: 0.5;
   }
+  .empty-text { font-size: 13px; color: var(--text-muted); line-height: 1.7; font-weight: 300; }
 
-  .empty-text { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
-  /* Divider */
-  .gold-rule {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
-    opacity: 0.4;
-  }
-
-  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 `;
 
 export default function App() {
-  const [leads, setLeads] = useState([]);
+  const [leads, setLeads]               = useState([]);
   const [conversations, setConversations] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [selectedLead, setSelectedLead] = useState(null);
-  const [activeTab, setActiveTab] = useState("leads");
-  const [stats, setStats] = useState({ total: 0, qualified: 0, appointments: 0, avgScore: 0 });
+  const [activeTab, setActiveTab]       = useState("leads");
+  const [stats, setStats]               = useState({ total: 0, qualified: 0, appointments: 0, avgScore: 0 });
 
   useEffect(() => {
     fetchAll();
-    const sub = supabase.channel("realtime-dashboard")
+    const sub = supabase.channel("realtime-db")
       .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, fetchAll)
       .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, fetchAll)
       .subscribe();
@@ -549,10 +571,10 @@ export default function App() {
     setAppointments(a.data || []);
     const ld = l.data || [];
     setStats({
-      total: ld.length,
-      qualified: ld.filter(x => x.status === "qualified").length,
-      appointments: ld.filter(x => x.status === "appointment_set").length,
-      avgScore: ld.length ? Math.round(ld.reduce((s, x) => s + (x.intent_score || 0), 0) / ld.length) : 0,
+      total:       ld.length,
+      qualified:   ld.filter(x => x.status === "qualified").length,
+      appointments:ld.filter(x => x.status === "appointment_set").length,
+      avgScore:    ld.length ? Math.round(ld.reduce((s, x) => s + (x.intent_score || 0), 0) / ld.length) : 0,
     });
   }
 
@@ -560,7 +582,7 @@ export default function App() {
     await supabase.from("conversations").insert({
       lead_id: leadId, channel: "web_chat", direction: "outbound",
       role: "system", content: "Human agent took over this conversation.",
-      human_takeover: true
+      human_takeover: true,
     });
     await supabase.from("leads").update({ status: "nurturing" }).eq("id", leadId);
     fetchAll();
@@ -571,7 +593,7 @@ export default function App() {
     ? conversations.filter(c => c.lead_id === selectedLead.id)
     : [];
 
-  const scoreColor = (s) =>
+  const scoreColor = s =>
     s > 70 ? "var(--green)" : s > 40 ? "var(--amber)" : "var(--red)";
 
   return (
@@ -582,18 +604,14 @@ export default function App() {
       <header className="header">
         <div className="header-left">
           <div className="logo-mark">B</div>
-          <div className="brand">
-            <h1>Basel Realty</h1>
-            <p>AI Command Center · Cristina Giral</p>
+          <div>
+            <span className="brand-name">Basel Realty</span>
+            <span className="brand-sub">AI Command Center · Cristina Giral</span>
           </div>
         </div>
         <div className="header-right">
-          <div className="status-pill">
-            <span className="dot dot-green" /> Sofia Active
-          </div>
-          <div className="status-pill">
-            <span className="dot dot-blue" /> Cal.com
-          </div>
+          <div className="status-pill"><span className="dot dot-green" /> Sofia Active</div>
+          <div className="status-pill"><span className="dot dot-blue" /> Cal.com</div>
         </div>
       </header>
 
@@ -601,26 +619,18 @@ export default function App() {
 
       {/* Stats */}
       <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Total Leads</div>
-          <div className="stat-value" style={{ color: "var(--gold)" }}>{stats.total}</div>
-          <div className="stat-sub">All channels</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Qualified</div>
-          <div className="stat-value" style={{ color: "var(--green)" }}>{stats.qualified}</div>
-          <div className="stat-sub">Ready to engage</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Tours Booked</div>
-          <div className="stat-value" style={{ color: "var(--blue)" }}>{stats.appointments}</div>
-          <div className="stat-sub">Scheduled viewings</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Avg Intent Score</div>
-          <div className="stat-value" style={{ color: scoreColor(stats.avgScore) }}>{stats.avgScore}</div>
-          <div className="stat-sub">Out of 100</div>
-        </div>
+        {[
+          { label: "Total Leads",     value: stats.total,       sub: "All channels",       color: "var(--gold)"  },
+          { label: "Qualified",       value: stats.qualified,   sub: "Ready to engage",    color: "var(--green)" },
+          { label: "Tours Booked",    value: stats.appointments,sub: "Scheduled viewings", color: "var(--blue)"  },
+          { label: "Avg Intent Score",value: stats.avgScore,    sub: "Out of 100",         color: scoreColor(stats.avgScore) },
+        ].map(s => (
+          <div key={s.label} className="stat-card">
+            <div className="stat-label">{s.label}</div>
+            <div className="stat-value" style={{ color: s.color }}>{s.value}</div>
+            <div className="stat-sub">{s.sub}</div>
+          </div>
+        ))}
       </div>
 
       {/* Main */}
@@ -631,9 +641,9 @@ export default function App() {
           <div className="sidebar-section">
             <div className="sidebar-title">Intelligence</div>
             {[
-              { id: "leads", label: "All Leads", icon: "◈", count: stats.total },
+              { id: "leads",         label: "All Leads",     icon: "◈", count: stats.total },
               { id: "conversations", label: "Conversations", icon: "◉", count: conversations.length },
-              { id: "appointments", label: "Appointments", icon: "◇", count: appointments.length },
+              { id: "appointments",  label: "Appointments",  icon: "—", count: appointments.length },
             ].map(item => (
               <div
                 key={item.id}
@@ -650,13 +660,13 @@ export default function App() {
           <div className="sidebar-section">
             <div className="sidebar-title">System Status</div>
             {[
-              { label: "Sofia — Voice Agent", color: "var(--green)" },
-              { label: "Cal.com Scheduling", color: "var(--blue)" },
-              { label: "Supabase — Live DB", color: "var(--gold)" },
+              { label: "Sofia — Voice Agent",  color: "var(--green)" },
+              { label: "Cal.com Scheduling",   color: "var(--blue)"  },
+              { label: "Supabase — Live DB",   color: "var(--gold)"  },
             ].map(s => (
-              <div key={s.label} className="nav-item" style={{ cursor: "default" }}>
-                <span className="nav-icon" style={{ color: s.color }}>◉</span>
-                <span style={{ fontSize: 12 }}>{s.label}</span>
+              <div key={s.label} className="sys-item">
+                <span style={{ color: s.color, fontSize: 8 }}>●</span>
+                {s.label}
               </div>
             ))}
           </div>
@@ -666,9 +676,9 @@ export default function App() {
         <main className="content">
           <div className="content-header">
             <div className="content-title">
-              {activeTab === "leads" && "Active Leads"}
+              {activeTab === "leads"         && "Active Leads"}
               {activeTab === "conversations" && "Conversations"}
-              {activeTab === "appointments" && "Appointments"}
+              {activeTab === "appointments"  && "Appointments"}
             </div>
             <div className="content-meta">
               {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
@@ -701,7 +711,7 @@ export default function App() {
                   <div className={`status-tag tag-${lead.status}`}>
                     {lead.status?.replace("_", " ")}
                   </div>
-                  <div>
+                  <div className="score-wrap">
                     <div className="score-number" style={{ color: scoreColor(lead.intent_score || 0) }}>
                       {lead.intent_score || 0}
                     </div>
@@ -730,8 +740,8 @@ export default function App() {
                   </div>
                   <div className="convo-text">{c.content}</div>
                   {c.human_takeover && (
-                    <div style={{ fontSize: 10, color: "var(--red)", marginTop: 8, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                      ◉ Human takeover
+                    <div style={{ fontSize: 10, color: "var(--red)", marginTop: 7, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                      ● Human takeover
                     </div>
                   )}
                 </div>
@@ -744,7 +754,7 @@ export default function App() {
             <div className="lead-list">
               {appointments.length === 0 ? (
                 <div className="empty-state">
-                  <div className="empty-glyph">◇</div>
+                  <div className="empty-glyph">—</div>
                   <div className="empty-text">No tours booked yet.<br />Sofia will schedule these automatically.</div>
                 </div>
               ) : appointments.map(a => (
@@ -778,12 +788,12 @@ export default function App() {
             <div className="detail-body">
               <div className="detail-grid">
                 {[
-                  ["Budget", selectedLead.budget_max ? `$${selectedLead.budget_max.toLocaleString()}` : "—"],
-                  ["Timeline", selectedLead.timeline || "—"],
-                  ["Language", selectedLead.preferred_lang?.toUpperCase() || "EN"],
-                  ["Channel", CHANNEL_LABEL[selectedLead.channel] || "—"],
+                  ["Budget",       selectedLead.budget_max ? `$${selectedLead.budget_max.toLocaleString()}` : "—"],
+                  ["Timeline",     selectedLead.timeline || "—"],
+                  ["Language",     selectedLead.preferred_lang?.toUpperCase() || "EN"],
+                  ["Channel",      CHANNEL_LABEL[selectedLead.channel] || "—"],
                   ["Intent Score", `${selectedLead.intent_score || 0} / 100`],
-                  ["Status", selectedLead.status?.replace("_", " ") || "—"],
+                  ["Status",       selectedLead.status?.replace("_", " ") || "—"],
                 ].map(([k, v]) => (
                   <div key={k} className="detail-field">
                     <div className="field-label">{k}</div>
@@ -793,13 +803,15 @@ export default function App() {
               </div>
 
               <button className="takeover-btn" onClick={() => takeover(selectedLead.id)}>
-                ◉ &nbsp; Take Over Conversation
+                ● &nbsp; Take Over Conversation
               </button>
 
               <div className="section-title">Conversation History</div>
 
               {leadConvos.length === 0 ? (
-                <div style={{ fontSize: 13, color: "var(--text-muted)", padding: "16px 0" }}>No messages yet.</div>
+                <div style={{ fontSize: 13, color: "var(--text-muted)", padding: "14px 0", fontWeight: 300 }}>
+                  No messages yet.
+                </div>
               ) : leadConvos.map(c => (
                 <div key={c.id} className={`bubble ${c.role}`}>
                   <div className={`bubble-role ${c.role}`}>
